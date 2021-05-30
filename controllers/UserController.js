@@ -181,6 +181,31 @@ const onLoginUser = (req, res) => {
     }
 }
 
+// Read
+const getAllUser = (req, res) => {
+    let queryGet = `SELECT * FROM users`
+
+    db.query (queryGet, (err, result) => {
+        try {
+            if (err) throw err
+
+            res.status (200).send ({
+                error: false,
+                data: result
+            })
+            
+        } catch (error) {
+            console.log (error)
+                res.status(500).send ({
+                    error: true,
+                    message: error.message
+                })
+        }
+    })
+}
+
+
+
 const getDataUserByToken = (req, res) => {
     let dataToken = req.dataToken
 
@@ -393,6 +418,7 @@ const onForgotPassword = (req, res) => {
 module.exports = {
     onRegisterUser,
     onLoginUser,
+    getAllUser,
     getDataUserByToken,
     onSearchUserByEmail,
     onEditUser,

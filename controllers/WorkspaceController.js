@@ -98,7 +98,13 @@ const onCreateMemberWorkspace = (req, res) => {
                     try {
                         if (err) throw err
 
-                        if (result1.length === 1) {
+                        if (result1[0].id === result[0].id) {
+                            res.status (200).send ({
+                                error: true,
+                                message: "User has been added to the workspace as creator of workspace."
+                            })
+
+                        } else if (result1.length === 1) {
 
                             let querySelect = `SELECT * FROM workspace_members WHERE workspaces_id = ${dataWorkspace.idWorkspace} AND members_users_id = ${result1[0].id}`
                             db.query (querySelect, (err, result2) => {
@@ -184,6 +190,59 @@ const onCreateMemberWorkspace = (req, res) => {
 }
 
 // Read
+const getDataWorkspace = (req, res) => {
+    try {
+        let data = req.body
+        // let dataToken = req.dataToken
+
+        if (!data.idWorkspace) throw ({message: "Empty data field detected"})
+        
+        let querySearch = 
+        `
+            SELECT * FROM workspaces
+            JOIN workspace_owners ON workspace_owners.workspaces_id = workspaces.id
+            JOIN users ON created_by_users_id = users.id
+            WHERE workspaces.id = ${data.idWorkspace}
+        `
+
+        db.query (querySearch, (err, result) => {
+            try {
+                if (err) throw err
+
+                if (result.length === 1) {
+                    // console.log (result[0])
+                    res.status (200).send ({
+                        error: false,
+                        data: result[0]
+                    })
+
+                } else {
+                    res.status (200).send ({
+                        error: true,
+                        message: "Data is not found."
+                    })
+                }
+
+            } catch (error) {
+                console.log (error)
+                res.status (500).send ({
+                    error: true, 
+                    message: error.message
+                })
+            }
+        })
+
+    } catch (error) {
+        console.log (error)
+        res.status (406).send ({
+            error: true,
+            message: error.message
+        })
+    }
+    
+}
+
+
 const getWorkspaceByOwner = (req, res) => {
     let dataToken = req.dataToken
     let querySearch = `SELECT * FROM users WHERE uid = ${dataToken.uid}`
@@ -831,6 +890,7 @@ const onDeleteMemberWorkspace = (req, res) => {
 module.exports = {
     onCreateWorkspace,
     onCreateMemberWorkspace,
+    getDataWorkspace,
     getWorkspaceByOwner,
     getWorkspaceByMember,
     getMembersFromWorkspace,

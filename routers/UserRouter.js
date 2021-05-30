@@ -6,6 +6,7 @@ const userController = require ("../controllers/UserController")
 
 Router.post ("/register", userController.onRegisterUser)
 Router.post ("/login", userController.onLoginUser)
+Router.get ("/get-all-user", userController.getAllUser)
 
 Router.post ("/get-data-user", jwtVerify, userController.getDataUserByToken)
 Router.post ("/check-user-by-email", userController.onSearchUserByEmail)
