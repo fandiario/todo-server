@@ -98,7 +98,14 @@ const onCreateMemberWorkspace = (req, res) => {
                     try {
                         if (err) throw err
 
-                        if (result1[0].id === result[0].id) {
+                        if (result1[0] === undefined) {
+                            // console.log ("undefined")
+                            res.status (200).send ({
+                                error: true,
+                                message: "User is not exist or has not registered yet."
+                            })
+
+                        } else if (result1[0].id === result[0].id) {
                             res.status (200).send ({
                                 error: true,
                                 message: "User has been added to the workspace as creator of workspace."
@@ -603,48 +610,40 @@ const onEditWorkspace = (req, res) => {
                     SELECT * FROM workspaces
                     JOIN workspace_owners ON workspaces_id = workspaces.id
                     JOIN users ON created_by_users_id = users.id
-                    WHERE users.id = ${result[0].id} AND workspaces.is_default = 1;
+                    WHERE users.id = ${result[0].id};
                 `
 
                 db.query (queryCheck, (err, result1) => {
                     try {
                         if (err) throw err
 
-                        if (result1.length === 0) {
-                            let dataToSend = {
-                                    title: data.title,
-                                    is_default: data.is_default
-                                }
-                
-                                let queryUpdate  = `UPDATE workspaces SET ? WHERE id = ${dataWorkspace.idWorkspace}`
-                                db.query (queryUpdate, dataToSend, (err, result1) => {
-                                    try {
-                                        if (err) throw err
-                                        
-                                        res.status (200).send ({
-                                            error: false,
-                                            id: dataWorkspace.idWorkspace,
-                                            title: data.title,
-                                            message: "Data has been updated."
-                                        })
-                
-                
-                                    } catch (error) {
-                                        console.log (error)
-                                        res.status (500).send ({
-                                            error: true,
-                                            message: error.message
-                                        })
-                                    }
-                                })
-
-                        } else {
-                            res.status (200).send ({
-                                error: true,
-                                message: "Another workspace has been set as Default already.",
-                                data: result1
-                            })
+                        let dataToSend = 
+                        {
+                            title: data.title,
+                            is_default: 0
                         }
+        
+                        let queryUpdate  = `UPDATE workspaces SET ? WHERE id = ${dataWorkspace.idWorkspace}`
+                        db.query (queryUpdate, dataToSend, (err, result1) => {
+                            try {
+                                if (err) throw err
+                                
+                                res.status (200).send ({
+                                    error: false,
+                                    id: dataWorkspace.idWorkspace,
+                                    title: data.title,
+                                    message: "Data has been updated."
+                                })
+        
+        
+                            } catch (error) {
+                                console.log (error)
+                                res.status (500).send ({
+                                    error: true,
+                                    message: error.message
+                                })
+                            }
+                        })
                         
                     } catch (error) {
                         console.log (error)
