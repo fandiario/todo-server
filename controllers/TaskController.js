@@ -227,13 +227,14 @@ const getCategoryByWorkspace = (req, res) => {
 
                 let queryGet = 
                 `
-                    SELECT * FROM category_tasks 
+                    SELECT category_tasks.id, category_tasks.category, category_tasks.is_default, category_tasks.created_at, category_tasks.category_at_workspaces_id FROM category_tasks 
                     JOIN workspaces ON category_at_workspaces_id = workspaces.id
                     WHERE workspaces.id = ${data.idWorkspace} OR category_tasks.is_default = 1;
                 `
                 db.query (queryGet, (err, result1) => {
                     try {
                         if (err) throw err
+                        // console.log (result1)
 
                         res.status (200). send ({
                             error: false,
