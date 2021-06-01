@@ -686,14 +686,14 @@ const onDeleteWorkspace = (req, res) => {
             `
                 SELECT * FROM workspaces
                 JOIN workspace_owners ON workspaces_id = workspaces.id
-                WHERE workspaces.id = ${dataWorkspace.idWorkspace} OR category_tasks.is_default = 1;
+                WHERE workspaces.id = ${dataWorkspace.idWorkspace};
             `
 
             db.query (querySearch, (err, result1) => {
                 try {
                     if (err) throw err
 
-                    console.log (result1)
+                    // console.log (result1)
 
                     if (result1.length === 1) {
                         if (result[0].id === result1[0].created_by_users_id) {
