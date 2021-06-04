@@ -10,8 +10,8 @@ Router.post ("/:idTask/assign-task",jwtVerify, taskController.onCreateTaskAssign
 
 Router.post ("/get-category-by-workspace", jwtVerify, taskController.getCategoryByWorkspace)
 Router.post ("/get-task-by-workspace", jwtVerify, taskController.getTaskbyWorkspace)
-Router.get ("/:idTask", taskController.getTaskbyId)
-Router.post ("/:idTask/get-assignee-from-task", taskController.getAssigneeFromTask)
+Router.post ("/get-data-task", taskController.getTaskbyId)
+Router.post ("/get-assignee-from-task", taskController.getAssigneeFromTask)
 
 Router.patch ("/:idTask/edit-task", jwtVerify, taskController.onUpdateTask)
 

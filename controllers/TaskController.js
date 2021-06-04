@@ -269,12 +269,12 @@ const getCategoryByWorkspace = (req, res) => {
 }
 
 const getTaskbyId = (req, res) => {
-    let data = req.params
+    let data = req.body
     // console.log (data.idTask)
 
     let queryGet = 
     `
-        SELECT tasks.id, title, description, date, tasks.created_at, email, category FROM tasks
+        SELECT tasks.id, title, description, date_start, date_end,  tasks.created_at, email, category FROM tasks
         JOIN users ON users.id = users_id
         JOIN category_tasks ON category_tasks.id = category_tasks_id
         WHERE tasks.id = ${data.idTask}
@@ -284,7 +284,10 @@ const getTaskbyId = (req, res) => {
         try {
             if (err) throw err
 
+            // console.log (result[0])
+
             if (result.length === 1) {
+
                 res.status (200).send ({
                     error: false,
                     id: result[0].id,
@@ -362,7 +365,7 @@ const getTaskbyWorkspace = (req, res) => {
 }
 
 const getAssigneeFromTask = (req, res) => {
-    let data = req.params
+    let data = req.body
 
     let querySearch = 
     `
