@@ -403,12 +403,21 @@ const getAssigneeFromTask = (req, res) => {
 
 // Update
 const onUpdateTask = (req, res) => {
-    try {
-        let data = req.body
-        let dataTask = req.params
-        let dataToken = req.dataToken
+    // let data = req.body
+    // let dataTask = req.params
+    // let dataToken = req.dataToken
 
+    // console.log (data)
+    // console.log (dataToken)
+
+    try {
+        const data = req.body
+        // const dataTask = req.params
+        const dataToken = req.dataToken
+
+        // console.log (data)
         // console.log (dataTask)
+        // console.log (data.category_tasks_category_at_workspaces_id)
 
         if (!data.title || !data.description || !data.date_start ||!data.date_end || !data.category_tasks_id || !data.idWorkspace || !data.category_tasks_category_at_workspaces_id) throw ({message: "Empty data field detected."})
 
@@ -421,7 +430,7 @@ const onUpdateTask = (req, res) => {
 
                 let queryGet = 
                 `
-                    SELECT * FROM tasks WHERE id = ${dataTask.idTask}
+                    SELECT * FROM tasks WHERE id = ${data.idTask}
                 `
                 db.query (queryGet, (err, result1) => {
                     try {
@@ -430,49 +439,86 @@ const onUpdateTask = (req, res) => {
                         // console.log (result1)
 
                         if (result1.length === 1) {
-                            if (result1[0].users_id === result[0].id && data.category_tasks_id !== 3 && data.category_tasks_id !== 4) {
-                                // console.log (result1)
 
-                                let dataToSend = {
-                                    title: data.title,
-                                    description: data.description,
-                                    date_start: data.date_start,
-                                    date_end: data.date_end,
-                                    category_tasks_id: data.category_tasks_id,
-                                    category_tasks_category_at_workspaces_id: data.category_tasks_category_at_workspaces_id,
-                                    workspaces_id: data.idWorkspace
-                                }
-
-                                let queryEdit = `UPDATE tasks SET ? WHERE id = ?`
-                                db.query (queryEdit, [dataToSend, dataTask.idTask], (err, result2) => {
-                                    try {
-                                        if (err) throw err
-
-                                        res.status (200).send ({
-                                            error: false,
-                                            id: dataTask.idTask,
-                                            title: data.title,
-                                            description: data.description,
-                                            date: data.date,
-                                            category_tasks_id: data.category_tasks_id,
-                                            message: "Data has been updated"
-                                        })
-                                        
-                                    } catch (error) {
-                                        console.log (error)
-                                        res.status (500).send ({
-                                            error: true,
-                                            message: error.message
-                                        }) 
-                                    }
-                                })
-
-                            } else {
-                                res.status (401).send ({
-                                    error: true,
-                                    message: "Unauthorized account"
-                                })
+                            let dataToSend = {
+                                title: data.title,
+                                description: data.description,
+                                date_start: data.date_start,
+                                date_end: data.date_end,
+                                category_tasks_id: data.category_tasks_id,
+                                category_tasks_category_at_workspaces_id: data.category_tasks_category_at_workspaces_id,
+                                workspaces_id: data.idWorkspace
                             }
+
+                            let queryEdit = `UPDATE tasks SET ? WHERE id = ?`
+                            db.query (queryEdit, [dataToSend, data.idTask], (err, result2) => {
+                                try {
+                                    if (err) throw err
+
+                                    res.status (200).send ({
+                                        error: false,
+                                        id: data.idTask,
+                                        title: data.title,
+                                        description: data.description,
+                                        date_start: data.date_start,
+                                        date_end: data.date_end,
+                                        category_tasks_id: data.category_tasks_id,
+                                        message: "Data has been updated"
+                                    })
+                                    
+                                } catch (error) {
+                                    console.log (error)
+                                    res.status (500).send ({
+                                        error: true,
+                                        message: error.message
+                                    }) 
+                                }
+                            })
+
+                            // if (result1[0].users_id === result[0].id && data.category_tasks_id !== 3 && data.category_tasks_id !== 4) {
+                            //     // console.log (result1)
+
+                            //     let dataToSend = {
+                            //         title: data.title,
+                            //         description: data.description,
+                            //         date_start: data.date_start,
+                            //         date_end: data.date_end,
+                            //         category_tasks_id: data.category_tasks_id,
+                            //         category_tasks_category_at_workspaces_id: data.category_tasks_category_at_workspaces_id,
+                            //         workspaces_id: data.idWorkspace
+                            //     }
+
+                            //     let queryEdit = `UPDATE tasks SET ? WHERE id = ?`
+                            //     db.query (queryEdit, [dataToSend, data.idTask], (err, result2) => {
+                            //         try {
+                            //             if (err) throw err
+
+                            //             res.status (200).send ({
+                            //                 error: false,
+                            //                 id: data.idTask,
+                            //                 title: data.title,
+                            //                 description: data.description,
+                            //                 date_start: data.date_start,
+                            //                 date_end: data.date_end,
+                            //                 category_tasks_id: data.category_tasks_id,
+                            //                 message: "Data has been updated"
+                            //             })
+                                        
+                            //         } catch (error) {
+                            //             console.log (error)
+                            //             res.status (500).send ({
+                            //                 error: true,
+                            //                 message: error.message
+                            //             }) 
+                            //         }
+                            //     })
+
+                            // } else {
+                            //     res.status (401).send ({
+                            //         error: true,
+                            //         message: "Unauthorized account"
+                            //     })
+                            // }
 
                         } else {
                             res.status (200).send ({
@@ -623,7 +669,7 @@ const onDeleteCategory = (req, res) => {
 
 const onDeleteTask = (req, res) => {
     try {
-        let data = req.body
+        // let data = req.body
         let dataTask = req.params
         let dataToken = req.dataToken
 

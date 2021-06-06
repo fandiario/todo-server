@@ -13,7 +13,7 @@ Router.post ("/get-task-by-workspace", jwtVerify, taskController.getTaskbyWorksp
 Router.post ("/get-data-task", taskController.getTaskbyId)
 Router.post ("/get-assignee-from-task", taskController.getAssigneeFromTask)
 
-Router.patch ("/:idTask/edit-task", jwtVerify, taskController.onUpdateTask)
+Router.patch ("/edit-task", jwtVerify, taskController.onUpdateTask)
 
 Router.post ("/delete-category", jwtVerify, taskController.onDeleteCategory)
 Router.post ("/:idTask/delete-task", jwtVerify, taskController.onDeleteTask)
