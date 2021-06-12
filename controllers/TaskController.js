@@ -171,7 +171,7 @@ const onCreateTaskAssigned = (req, res) => {
                                     error: false,
                                     task: result1[0].title,
                                     assignee_users_id: data.assignee_users_id,
-                                    message: `User with id ${data.assignee_users_id} has been assigned for this task.`
+                                    message: `User with id ${data.assignee_users_id} has been assigned for this task successfully.`
                                 })
 
                             } catch (error) {
